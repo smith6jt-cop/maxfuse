@@ -2,12 +2,16 @@ r"""
 Sphinx configuration
 """
 # add system path to make maxfuse importable
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../src'))
+
 import inspect
 import sphinx_autodoc_typehints
 
 project = 'MaxFuse'
-version = '0.0.1'
-release = '0.0.1'
+version = '0.1.0'
+release = '0.1.0'
 author = "Shuxiao Chen, Bokai Zhu"
 
 extensions = [

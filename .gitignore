@@ -3,9 +3,29 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Data files (kept on disk, not tracked in git)
+*.h5ad
+*.tsv
+/sinusoids_vessels.csv
+/1904CC2B_cells.tsv
+docs/1904_gene/
+docs/raw_feature_bc_matrix/
+docs/*.h5ad
+docs/*.csv
+!docs/protein_gene_conversion.csv
+!examples/data/small_test_*.csv
+
+# Large outputs
+docs/*.png
+docs/*.pdf
+
+# Old structure (after reorganization)
+/maxfuse/
+/mario-py/
+/Archive/
+
 # C extensions
 *.so
-
 # Distribution / packaging
 .Python
 build/
@@ -131,3 +151,5 @@ dmypy.json
 # custom
 .idea/
 data/
+!examples/data/
+!examples/data/README.md
