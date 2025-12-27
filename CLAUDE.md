@@ -11,42 +11,48 @@ The package includes MARIO (Matching with Approximate Regional Importance with O
 ## Repository Structure
 
 ```
-maxfuse/
-├── src/maxfuse/           # Main package (src layout)
-│   ├── core/              # MaxFuse core functionality
-│   │   ├── model.py       # Fusor class - main entry point
-│   │   ├── match_utils.py # Matching algorithms
-│   │   ├── graph.py       # Graph construction & clustering
-│   │   ├── utils.py       # Numerical utilities
-│   │   ├── spatial_utils.py # Spatial data utilities
-│   │   └── metrics.py     # Evaluation metrics
-│   └── mario/             # MARIO matching module
-│       ├── match.py       # Mario class
-│       ├── match_utils.py # MARIO matching utilities
-│       ├── cluster.py     # Clustering algorithms
-│       ├── embed.py       # Embedding utilities
-│       └── utils.py       # MARIO utilities
-├── examples/              # Example notebooks
-├── docs/                  # Sphinx documentation
-├── pyproject.toml         # Package configuration
-└── README.md
+repo/
+├── src/
+│   ├── maxfuse/               # Self-contained package (portable)
+│   │   ├── __init__.py        # from maxfuse import Fusor, Mario
+│   │   ├── pyproject.toml     # Package configuration
+│   │   ├── README.md          # Package readme
+│   │   ├── core/              # MaxFuse core functionality
+│   │   │   ├── model.py       # Fusor class - main entry point
+│   │   │   ├── match_utils.py # Matching algorithms
+│   │   │   ├── graph.py       # Graph construction & clustering
+│   │   │   ├── utils.py       # Numerical utilities
+│   │   │   ├── spatial_utils.py # Spatial data utilities
+│   │   │   └── metrics.py     # Evaluation metrics
+│   │   └── mario/             # MARIO matching module
+│   │       ├── match.py       # Mario class
+│   │       ├── match_utils.py # MARIO matching utilities
+│   │       ├── cluster.py     # Clustering algorithms
+│   │       ├── embed.py       # Embedding utilities
+│   │       └── utils.py       # MARIO utilities
+│   └── mario-py/              # Original MARIO repo (reference)
+├── notebooks/                 # Analysis notebooks
+├── data/                      # Data files (not tracked in git)
+├── results/                   # Output files (not tracked in git)
+├── docs/                      # Sphinx documentation
+├── media/                     # Images and media files
+├── environment.yml            # Conda environment
+└── CLAUDE.md                  # This file
 ```
 
 ## Installation & Development
 
 ```bash
 # Create environment and install
-conda create -n maxfuse python=3.8
+conda env create -f environment.yml
 conda activate maxfuse
-pip install -e .  # For development installation
+pip install -e src/maxfuse  # For development installation
 
-# Or install from PyPI
+# Or install from PyPI (when published)
 pip install maxfuse
 ```
 
 **Key dependencies:** igraph, leidenalg, numpy, pandas, scanpy, scipy, scikit-learn, matplotlib, requests
-
-**Note:** Example notebooks in `examples/` serve as integration tests.
 
 ## Usage
 
@@ -102,16 +108,6 @@ The `Fusor` class supports two smoothing approaches (set via `method` parameter)
 - **`centroid_shrinkage`**: Shrinks cells toward cluster centroids
 - **`graph_smoothing`**: Shrinks cells toward neighborhood averages
 
-## Documentation
-
-Documentation is built with Sphinx and hosted on ReadTheDocs. Build locally:
-
-```bash
-cd docs
-pip install -r requirements.txt
-make html
-```
-
 ## Key Data Structures
 
 - **Matching format**: Lists of `[rows, cols, vals]` where `(rows[i], cols[i])` is a matched pair with distance/score `vals[i]`
@@ -120,11 +116,31 @@ make html
 
 ## Data Files
 
-Large data files are not tracked in git but are expected in `docs/` for running example notebooks:
-- `docs/1904_CC2B_cell.h5ad` - CODEX protein data
-- `docs/raw_feature_bc_matrix/` - 10x scRNAseq data
-- `docs/1904_gene/` - Cell Ranger output
+Data files are stored in `data/` (not tracked in git):
+- CODEX protein data (.h5ad files)
+- scRNAseq data (10x format)
+- Conversion tables (.csv)
+
+Results are stored in `results/` (not tracked in git).
 
 ## Archive
 
-Manuscript analysis code is preserved in the `archive-manuscript` orphan branch. This code uses a development version of MaxFuse with slightly different API grammar and should not be used as a reference for the current API.
+Manuscript analysis code is preserved in the `archive-manuscript` orphan branch.
+
+## Skills Registry
+
+This project uses a skills registry for Claude memory persistence at `.skills_registry/`.
+
+### Commands
+- `/advise` - Search skills before starting work (finds related experiments, what worked/failed)
+- `/retrospective` - Save learnings from current session as a new skill
+
+### Available Skills
+- `plugins/maxfuse/repo-reorganization/` - Python package with pyproject.toml inside package directory
+- `plugins/maxfuse/region-aware-matching/` - Spatial region-aware cell matching for CODEX/scRNAseq
+
+### Adding New Skills
+1. Copy `templates/experiment-skill-template/` to `plugins/maxfuse/your-skill-name/`
+2. Update `plugin.json` with trigger conditions
+3. Fill in `SKILL.md` with goal, what worked, what failed, exact parameters
+4. Push to the Skills_Registry repo
