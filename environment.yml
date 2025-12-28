@@ -1,4 +1,4 @@
-name: maxfuse
+name: Kintegrate
 channels:
   - conda-forge
   - bioconda
@@ -37,5 +37,5 @@ dependencies:
   - pip
   - pip:
     # Install local packages in development mode
-    - -e .
-    - -e ./mario-py
+    - -e src/maxfuse
+    - -e src/mario-py
