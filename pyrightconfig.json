@@ -1,0 +1,26 @@
+{
+  "include": ["src/**/*.py", "notebooks/**/*.py"],
+  "exclude": ["**/__pycache__", "**/node_modules", ".git"],
+
+  "typeCheckingMode": "basic",
+
+  "reportMissingImports": false,
+  "reportMissingTypeStubs": false,
+  "reportUnknownMemberType": false,
+  "reportUnknownArgumentType": false,
+  "reportUnknownVariableType": false,
+  "reportUnknownParameterType": false,
+  "reportGeneralTypeIssues": false,
+  "reportOptionalMemberAccess": false,
+  "reportOptionalSubscript": false,
+  "reportOptionalCall": false,
+  "reportOptionalIterable": false,
+  "reportOptionalOperand": false,
+  "reportArgumentType": false,
+  "reportIndexIssue": false,
+  "reportOperatorIssue": false,
+  "reportAttributeAccessIssue": false,
+
+  "pythonVersion": "3.10",
+  "pythonPlatform": "Linux"
+}
