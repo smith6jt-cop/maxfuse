@@ -114,14 +114,50 @@ The `Fusor` class supports two smoothing approaches (set via `method` parameter)
 - **Graph edges**: Lists of `[rows, cols, weights]` representing weighted k-NN graph edges
 - Arrays are numpy ndarrays with shape `(n_samples, n_features)`
 
+## Notebook Pipeline
+
+The analysis notebooks form a connected pipeline via checkpoint files:
+
+```
+notebooks/
+├── 1_preprocessing.ipynb   → results/1_preprocessing/
+│   Load: data/*.tsv, data/raw_feature_bc_matrix/
+│   Save: protein_adata.h5ad, rna_adata.h5ad, rna_adata_lognorm.h5ad
+│
+├── 2_integration.ipynb     → results/2_integration/
+│   Load: results/1_preprocessing/*
+│   Save: maxfuse_matching.pkl, normalized arrays, correspondence.csv
+│
+└── 3_visualization.ipynb   → results/3_visualization/
+    Load: results/1_preprocessing/*, results/2_integration/*
+    Save: figures, spatial clusters
+```
+
+### Running the Pipeline
+
+1. Run `1_preprocessing.ipynb` first (loads raw data, QC filtering)
+2. Run `2_integration.ipynb` (MaxFuse/MARIO integration)
+3. Run `3_visualization.ipynb` (visualizations, spatial mapping)
+
+Each notebook checks for required input files and provides clear error messages if prerequisites are missing.
+
+### Checkpoint File Formats
+
+| Data Type | Format | Location |
+|-----------|--------|----------|
+| AnnData objects | `.h5ad` | `results/*/` |
+| Matching results | `.pkl`, `.csv` | `results/2_integration/` |
+| NumPy arrays | `.npy` | `results/2_integration/` |
+| Parameters | `.json` | `results/*/` |
+
 ## Data Files
 
 Data files are stored in `data/` (not tracked in git):
-- CODEX protein data (.h5ad files)
-- scRNAseq data (10x format)
+- CODEX protein data (.h5ad files, .tsv from QuPath)
+- scRNAseq data (10x format: matrix.mtx.gz, features.tsv.gz, barcodes.tsv.gz)
 - Conversion tables (.csv)
 
-Results are stored in `results/` (not tracked in git).
+Results are stored in `results/` (not tracked in git), organized by notebook.
 
 ## Archive
 
@@ -138,6 +174,9 @@ This project uses a skills registry for Claude memory persistence at `.skills_re
 ### Available Skills
 - `plugins/maxfuse/repo-reorganization/` - Python package with pyproject.toml inside package directory
 - `plugins/maxfuse/region-aware-matching/` - Spatial region-aware cell matching for CODEX/scRNAseq
+- `plugins/scientific/notebook-checkpoint-pattern/` - Connecting notebooks via checkpoint files
+- `plugins/scientific/plotly-figurewidget-interactive/` - Fix for Plotly FigureWidget interactive dashboard bugs
+- `plugins/scientific/project-data-separation/` - Separating repository code from user data
 
 ### Adding New Skills
 1. Copy `templates/experiment-skill-template/` to `plugins/maxfuse/your-skill-name/`
