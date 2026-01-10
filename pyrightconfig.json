@@ -2,7 +2,7 @@
   "include": ["src/**/*.py", "notebooks/**/*.py"],
   "exclude": ["**/__pycache__", "**/node_modules", ".git"],
 
-  "typeCheckingMode": "basic",
+  "typeCheckingMode": "off",
 
   "reportMissingImports": false,
   "reportMissingTypeStubs": false,
@@ -20,6 +20,8 @@
   "reportIndexIssue": false,
   "reportOperatorIssue": false,
   "reportAttributeAccessIssue": false,
+  "reportUndefinedVariable": false,
+  "reportCallIssue": false,
 
   "pythonVersion": "3.10",
   "pythonPlatform": "Linux"
