@@ -128,9 +128,13 @@ notebooks/
 │   Load: results/1_preprocessing/*
 │   Save: maxfuse_matching.pkl, normalized arrays, correspondence.csv
 │
-└── 3_visualization.ipynb   → results/3_visualization/
-    Load: results/1_preprocessing/*, results/2_integration/*
-    Save: figures, spatial clusters
+├── 3_visualization.ipynb   → results/3_visualization/
+│   Load: results/1_preprocessing/*, results/2_integration/*
+│   Save: figures, spatial clusters, aligned indices, cell types
+│
+└── 5_analysis.ipynb        → results/5_analysis/
+    Load: results/1_preprocessing/*, results/2_integration/*, results/3_visualization/*
+    Save: validation results, cross-validation, cell type expression profiles
 ```
 
 ### Running the Pipeline
@@ -138,6 +142,7 @@ notebooks/
 1. Run `1_preprocessing.ipynb` first (loads raw data, QC filtering)
 2. Run `2_integration.ipynb` (MaxFuse/MARIO integration)
 3. Run `3_visualization.ipynb` (visualizations, spatial mapping)
+4. Run `5_analysis.ipynb` (statistical validation, gene expression inference)
 
 Each notebook checks for required input files and provides clear error messages if prerequisites are missing.
 
@@ -159,6 +164,25 @@ Data files are stored in `data/` (not tracked in git):
 
 Results are stored in `results/` (not tracked in git), organized by notebook.
 
+## Integration Validation Best Practices
+
+### Cross-Validation Direction
+When validating RNA-protein integration accuracy, the correct question is:
+- **Correct**: "Can RNA expression predict protein levels?" (RNA → Protein)
+- **Wrong**: "Can protein predict RNA?" (small panel can't explain large panel)
+
+The rich RNA panel (18k genes) should predict the sparse protein panel (26 markers), not vice versa.
+
+### Key Metrics
+1. **Spearman correlation** (shared features): Validates that matched cells have correlated expression
+2. **R² from cross-validation**: Measures how well RNA predicts protein (expect 5-35% for good markers)
+3. **Permutation p-value**: Tests if matching is better than random (this is the critical metric)
+
+### Interpreting Results
+- Low R² (4-7%) is normal for RNA→protein prediction due to post-transcriptional regulation
+- Permutation p-value < 0.01 confirms the integration captured real biological signal
+- Best performing markers: B cell (MS4A1/CD20), macrophage (CD68), T cell (CD3E)
+
 ## Archive
 
 Manuscript analysis code is preserved in the `archive-manuscript` orphan branch.
@@ -177,6 +201,7 @@ This project uses a skills registry for Claude memory persistence at `.skills_re
 - `plugins/scientific/notebook-checkpoint-pattern/` - Connecting notebooks via checkpoint files
 - `plugins/scientific/plotly-figurewidget-interactive/` - Fix for Plotly FigureWidget interactive dashboard bugs
 - `plugins/scientific/project-data-separation/` - Separating repository code from user data
+- `plugins/scientific/sparse-expression-visualization/` - Bar plots vs boxplots for sparse scRNA-seq data
 
 ### Adding New Skills
 1. Copy `templates/experiment-skill-template/` to `plugins/maxfuse/your-skill-name/`
