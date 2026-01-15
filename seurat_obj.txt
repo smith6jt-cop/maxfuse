@@ -1,0 +1,434 @@
+Formal class 'Seurat' [package "SeuratObject"] with 13 slots
+  ..@ assays      :List of 2
+  .. ..$ RNA :Formal class 'Assay5' [package "SeuratObject"] with 8 slots
+  .. .. .. ..@ layers    :List of 3
+  .. .. .. .. ..$ data      :Formal class 'dgCMatrix' [package "Matrix"] with 6 slots
+  .. .. .. .. .. .. ..@ i       : int [1:7721207] 17 41 48 146 172 199 228 242 370 379 ...
+  .. .. .. .. .. .. ..@ p       : int [1:5966] 0 597 1634 2547 3832 4934 6509 8201 9612 10748 ...
+  .. .. .. .. .. .. ..@ Dim     : int [1:2] 34453 5965
+  .. .. .. .. .. .. ..@ Dimnames:List of 2
+  .. .. .. .. .. .. .. ..$ : NULL
+  .. .. .. .. .. .. .. ..$ : NULL
+  .. .. .. .. .. .. ..@ x       : num [1:7721207] 2.53 2.53 2.53 2.53 2.53 ...
+  .. .. .. .. .. .. ..@ factors : list()
+  .. .. .. .. ..$ counts    :Formal class 'dgCMatrix' [package "Matrix"] with 6 slots
+  .. .. .. .. .. .. ..@ i       : int [1:7721207] 17 41 48 146 172 199 228 242 370 379 ...
+  .. .. .. .. .. .. ..@ p       : int [1:5966] 0 597 1634 2547 3832 4934 6509 8201 9612 10748 ...
+  .. .. .. .. .. .. ..@ Dim     : int [1:2] 34453 5965
+  .. .. .. .. .. .. ..@ Dimnames:List of 2
+  .. .. .. .. .. .. .. ..$ : NULL
+  .. .. .. .. .. .. .. ..$ : NULL
+  .. .. .. .. .. .. ..@ x       : num [1:7721207] 1 1 1 1 1 1 1 1 1 2 ...
+  .. .. .. .. .. .. ..@ factors : list()
+  .. .. .. .. ..$ scale.data: num [1:34453, 1:5965] -0.1193 -0.1851 -0.0953 -0.037 -0.3002 ...
+  .. .. .. ..@ cells     :Formal class 'LogMap' [package "SeuratObject"] with 1 slot
+  .. .. .. .. .. ..@ .Data: logi [1:5965, 1:3] TRUE TRUE TRUE TRUE TRUE TRUE ...
+  .. .. .. .. .. .. ..- attr(*, "dimnames")=List of 2
+  .. .. .. .. .. .. .. ..$ : chr [1:5965] "AAACCTGAGCTCTCGG-1_1" "AAACCTGCACGAAAGC-1_1" "AAACCTGCATAAAGGT-1_1" "AAACCTGGTAAATGAC-1_1" ...
+  .. .. .. .. .. .. .. ..$ : chr [1:3] "data" "counts" "scale.data"
+  .. .. .. .. .. ..$ dim     : int [1:2] 5965 3
+  .. .. .. .. .. ..$ dimnames:List of 2
+  .. .. .. .. .. .. ..$ : chr [1:5965] "AAACCTGAGCTCTCGG-1_1" "AAACCTGCACGAAAGC-1_1" "AAACCTGCATAAAGGT-1_1" "AAACCTGGTAAATGAC-1_1" ...
+  .. .. .. .. .. .. ..$ : chr [1:3] "data" "counts" "scale.data"
+  .. .. .. ..@ features  :Formal class 'LogMap' [package "SeuratObject"] with 1 slot
+  .. .. .. .. .. ..@ .Data: logi [1:34453, 1:3] TRUE TRUE TRUE TRUE TRUE TRUE ...
+  .. .. .. .. .. .. ..- attr(*, "dimnames")=List of 2
+  .. .. .. .. .. .. .. ..$ : chr [1:34453] "LINC01409" "LINC01128" "LINC00115" "FAM41C" ...
+  .. .. .. .. .. .. .. ..$ : chr [1:3] "data" "counts" "scale.data"
+  .. .. .. .. .. ..$ dim     : int [1:2] 34453 3
+  .. .. .. .. .. ..$ dimnames:List of 2
+  .. .. .. .. .. .. ..$ : chr [1:34453] "LINC01409" "LINC01128" "LINC00115" "FAM41C" ...
+  .. .. .. .. .. .. ..$ : chr [1:3] "data" "counts" "scale.data"
+  .. .. .. ..@ default   : int 1
+  .. .. .. ..@ assay.orig: chr(0) 
+  .. .. .. ..@ meta.data :'data.frame':	34453 obs. of  26 variables:
+  .. .. .. .. ..$ vf_vst_counts.51_pln_mean                   : num [1:34453] 0.02692 0.05842 0.01184 0.00286 0.10252 ...
+  .. .. .. .. ..$ vf_vst_counts.51_pln_variance               : num [1:34453] 0.02773 0.06456 0.0117 0.00286 0.10425 ...
+  .. .. .. .. ..$ vf_vst_counts.51_pln_variance.expected      : num [1:34453] 0.03073 0.06699 0.01379 0.00316 0.11773 ...
+  .. .. .. .. ..$ vf_vst_counts.51_pln_variance.standardized  : num [1:34453] 0.902 0.964 0.848 0.903 0.886 ...
+  .. .. .. .. ..$ vf_vst_counts.51_pln_variable               : logi [1:34453] FALSE FALSE FALSE FALSE FALSE FALSE ...
+  .. .. .. .. ..$ vf_vst_counts.51_pln_rank                   : int [1:34453] NA NA NA NA NA NA NA NA NA NA ...
+  .. .. .. .. ..$ vf_vst_counts.36_pln_mean                   : num [1:34453] 0.00584 0.02242 0.00911 0 0.08407 ...
+  .. .. .. .. ..$ vf_vst_counts.36_pln_variance               : num [1:34453] 0.00627 0.02332 0.00903 0 0.08917 ...
+  .. .. .. .. ..$ vf_vst_counts.36_pln_variance.expected      : num [1:34453] 0.00639 0.0247 0.01014 0 0.09574 ...
+  .. .. .. .. ..$ vf_vst_counts.36_pln_variance.standardized  : num [1:34453] 0.981 0.944 0.891 0 0.931 ...
+  .. .. .. .. ..$ vf_vst_counts.36_pln_variable               : logi [1:34453] FALSE FALSE FALSE FALSE FALSE FALSE ...
+  .. .. .. .. ..$ vf_vst_counts.36_pln_rank                   : int [1:34453] NA NA NA NA NA NA NA 1753 NA NA ...
+  .. .. .. .. ..$ vf_vst_counts.51_slice_mean                 : num [1:34453] 0 0 0 0 0.143 ...
+  .. .. .. .. ..$ vf_vst_counts.51_slice_variance             : num [1:34453] 0 0 0 0 0.164 ...
+  .. .. .. .. ..$ vf_vst_counts.51_slice_variance.expected    : num [1:34453] 0 0 0 0 0.203 ...
+  .. .. .. .. ..$ vf_vst_counts.51_slice_variance.standardized: num [1:34453] 0 0 0 0 0.81 ...
+  .. .. .. .. ..$ vf_vst_counts.51_slice_variable             : logi [1:34453] FALSE FALSE FALSE FALSE FALSE FALSE ...
+  .. .. .. .. ..$ vf_vst_counts.51_slice_rank                 : int [1:34453] NA NA NA NA NA NA 555 580 NA NA ...
+  .. .. .. .. ..$ vf_vst_counts.36_slice_mean                 : num [1:34453] 0 0 0.00716 0 0.10024 ...
+  .. .. .. .. ..$ vf_vst_counts.36_slice_variance             : num [1:34453] 0 0 0.00713 0 0.10476 ...
+  .. .. .. .. ..$ vf_vst_counts.36_slice_variance.expected    : num [1:34453] 0 0 0.0077 0 0.1186 ...
+  .. .. .. .. ..$ vf_vst_counts.36_slice_variance.standardized: num [1:34453] 0 0 0.925 0 0.883 ...
+  .. .. .. .. ..$ vf_vst_counts.36_slice_variable             : logi [1:34453] FALSE FALSE FALSE FALSE FALSE FALSE ...
+  .. .. .. .. ..$ vf_vst_counts.36_slice_rank                 : int [1:34453] NA NA NA NA NA NA 889 82 NA NA ...
+  .. .. .. .. ..$ var.features                                : chr [1:34453] NA NA NA NA ...
+  .. .. .. .. ..$ var.features.rank                           : int [1:34453] NA NA NA NA NA NA 798 610 NA NA ...
+  .. .. .. ..@ misc      : Named list()
+  .. .. .. ..@ key       : chr "rna_"
+  .. ..$ CITE:Formal class 'Assay' [package "SeuratObject"] with 8 slots
+  .. .. .. ..@ counts       :Formal class 'dgCMatrix' [package "Matrix"] with 6 slots
+  .. .. .. .. .. ..@ i       : int(0) 
+  .. .. .. .. .. ..@ p       : int [1:5966] 0 0 0 0 0 0 0 0 0 0 ...
+  .. .. .. .. .. ..@ Dim     : int [1:2] 162 5965
+  .. .. .. .. .. ..@ Dimnames:List of 2
+  .. .. .. .. .. .. ..$ : chr [1:162] "CD4.1" "CD8" "CD69.1" "CD27.1" ...
+  .. .. .. .. .. .. ..$ : chr [1:5965] "AAACCTGAGCTCTCGG-1_1" "AAACCTGCACGAAAGC-1_1" "AAACCTGCATAAAGGT-1_1" "AAACCTGGTAAATGAC-1_1" ...
+  .. .. .. .. .. ..@ x       : num(0) 
+  .. .. .. .. .. ..@ factors : list()
+  .. .. .. ..@ data         :Formal class 'dgCMatrix' [package "Matrix"] with 6 slots
+  .. .. .. .. .. ..@ i       : int [1:237670] 0 1 2 3 4 5 6 7 8 9 ...
+  .. .. .. .. .. ..@ p       : int [1:5966] 0 24 48 72 96 120 144 168 192 216 ...
+  .. .. .. .. .. ..@ Dim     : int [1:2] 162 5965
+  .. .. .. .. .. ..@ Dimnames:List of 2
+  .. .. .. .. .. .. ..$ : chr [1:162] "CD4.1" "CD8" "CD69.1" "CD27.1" ...
+  .. .. .. .. .. .. ..$ : chr [1:5965] "AAACCTGAGCTCTCGG-1_1" "AAACCTGCACGAAAGC-1_1" "AAACCTGCATAAAGGT-1_1" "AAACCTGGTAAATGAC-1_1" ...
+  .. .. .. .. .. ..@ x       : num [1:237670] 6.92 32.78 7.61 8.66 6.51 ...
+  .. .. .. .. .. ..@ factors : list()
+  .. .. .. ..@ scale.data   : num[0 , 0 ] 
+  .. .. .. ..@ assay.orig   : NULL
+  .. .. .. ..@ var.features : chr(0) 
+  .. .. .. ..@ meta.features:'data.frame':	162 obs. of  0 variables
+  .. .. .. ..@ misc         :List of 1
+  .. .. .. .. ..$ calcN: logi TRUE
+  .. .. .. ..@ key          : chr "cite_"
+  ..@ meta.data   :'data.frame':	5965 obs. of  39 variables:
+  .. ..$ orig.ident                       : chr [1:5965] "SeuratProject" "SeuratProject" "SeuratProject" "SeuratProject" ...
+  .. ..$ nCount_RNA                       : num [1:5965] 867 3012 1546 2598 2400 ...
+  .. ..$ nFeature_RNA                     : num [1:5965] 597 1037 913 1285 1102 ...
+  .. ..$ propmt                           : num [1:5965] 0 0 0 0 0 0 0 0 0 0 ...
+  .. ..$ rna_size                         : num [1:5965] 2.94 3.48 3.19 3.42 3.38 ...
+  .. ..$ ngene                            : num [1:5965] 598 1039 916 1292 1104 ...
+  .. ..$ prot_size                        : num [1:5965] 2.46 2.61 2.63 2.5 2.74 ...
+  .. ..$ bc                               : chr [1:5965] "AAACCTGAGCTCTCGG-1" "AAACCTGCACGAAAGC-1" "AAACCTGCATAAAGGT-1" "AAACCTGGTAAATGAC-1" ...
+  .. ..$ RNA.weight                       : num [1:5965] 0.4755 0.5779 0.7496 0.0978 0.3902 ...
+  .. ..$ CITE.weight                      : num [1:5965] 0.525 0.422 0.25 0.902 0.61 ...
+  .. ..$ wsnn_res.1                       : chr [1:5965] "10" "9" "12" "1" ...
+  .. ..$ seurat_clusters                  : Factor w/ 17 levels "0","1","2","3",..: 5 2 5 10 2 3 9 8 11 8 ...
+  .. ..$ pANN_0.25_0.005_719              : num [1:5965] 0 0.0312 0.2969 0.0938 0.0312 ...
+  .. ..$ DF.classifications_0.25_0.005_719: chr [1:5965] "Singlet" "Singlet" "Singlet" "Singlet" ...
+  .. ..$ tissue                           : chr [1:5965] "pln" "pln" "pln" "pln" ...
+  .. ..$ pid                              : chr [1:5965] "51" "51" "51" "51" ...
+  .. ..$ pid_tissue                       : chr [1:5965] "51_pln" "51_pln" "51_pln" "51_pln" ...
+  .. ..$ pANN_0.25_0.005_621              : num [1:5965] NA NA NA NA NA NA NA NA NA NA ...
+  .. ..$ DF.classifications_0.25_0.005_621: chr [1:5965] NA NA NA NA ...
+  .. ..$ rna.size                         : num [1:5965] NA NA NA NA NA NA NA NA NA NA ...
+  .. ..$ prot.size                        : num [1:5965] NA NA NA NA NA NA NA NA NA NA ...
+  .. ..$ n.gene                           : int [1:5965] NA NA NA NA NA NA NA NA NA NA ...
+  .. ..$ mt.prop                          : num [1:5965] NA NA NA NA NA NA NA NA NA NA ...
+  .. ..$ drop.class                       : chr [1:5965] NA NA NA NA ...
+  .. ..$ percent.mt                       : num [1:5965] NA NA NA NA NA NA NA NA NA NA ...
+  .. ..$ wsnn_res.2                       : chr [1:5965] NA NA NA NA ...
+  .. ..$ cdr3a                            : chr [1:5965] NA NA NA NA ...
+  .. ..$ v_gene                           : chr [1:5965] NA NA NA NA ...
+  .. ..$ j_gene                           : chr [1:5965] NA NA NA NA ...
+  .. ..$ cdr3b                            : chr [1:5965] NA NA NA NA ...
+  .. ..$ va_gene                          : chr [1:5965] NA NA NA NA ...
+  .. ..$ ja_gene                          : chr [1:5965] NA NA NA NA ...
+  .. ..$ vb_gene                          : chr [1:5965] NA NA NA NA ...
+  .. ..$ RNA_snn_res.1                    : Factor w/ 17 levels "0","1","2","3",..: 5 2 5 10 2 3 9 8 11 8 ...
+  .. ..$ pANN_0.25_0.04_34                : num [1:5965] NA NA NA NA NA NA NA NA NA NA ...
+  .. ..$ DF.classifications_0.25_0.04_34  : chr [1:5965] NA NA NA NA ...
+  .. ..$ RNA_snn_res.1.2                  : chr [1:5965] NA NA NA NA ...
+  .. ..$ RNA_snn_res.1.5                  : chr [1:5965] NA NA NA NA ...
+  .. ..$ tissue_cluster                   : chr [1:5965] "pln_4" "pln_1" "pln_4" "pln_9" ...
+  ..@ active.assay: chr "RNA"
+  ..@ active.ident: Factor w/ 17 levels "0","1","2","3",..: 5 2 5 10 2 3 9 8 11 8 ...
+  .. ..- attr(*, "names")= chr [1:5965] "AAACCTGAGCTCTCGG-1_1" "AAACCTGCACGAAAGC-1_1" "AAACCTGCATAAAGGT-1_1" "AAACCTGGTAAATGAC-1_1" ...
+  ..@ graphs      :List of 2
+  .. ..$ RNA_nn :Formal class 'Graph' [package "SeuratObject"] with 7 slots
+  .. .. .. ..@ assay.used: chr(0) 
+  .. .. .. ..@ i         : int [1:94550] 0 400 604 818 1041 1299 2031 2188 2778 3746 ...
+  .. .. .. ..@ p         : int [1:5966] 0 12 17 19 38 43 64 78 115 144 ...
+  .. .. .. ..@ Dim       : int [1:2] 5965 5965
+  .. .. .. ..@ Dimnames  :List of 2
+  .. .. .. .. ..$ : chr [1:5965] "AAACCTGAGCTCTCGG-1_1" "AAACCTGCACGAAAGC-1_1" "AAACCTGCATAAAGGT-1_1" "AAACCTGGTAAATGAC-1_1" ...
+  .. .. .. .. ..$ : chr [1:5965] "AAACCTGAGCTCTCGG-1_1" "AAACCTGCACGAAAGC-1_1" "AAACCTGCATAAAGGT-1_1" "AAACCTGGTAAATGAC-1_1" ...
+  .. .. .. ..@ x         : num [1:94550] 1 1 1 1 1 1 1 1 1 1 ...
+  .. .. .. ..@ factors   : list()
+  .. ..$ RNA_snn:Formal class 'Graph' [package "SeuratObject"] with 7 slots
+  .. .. .. ..@ assay.used: chr(0) 
+  .. .. .. ..@ i         : int [1:295697] 0 11 400 604 802 818 973 980 1041 1299 ...
+  .. .. .. ..@ p         : int [1:5966] 0 30 42 80 123 139 179 202 272 320 ...
+  .. .. .. ..@ Dim       : int [1:2] 5965 5965
+  .. .. .. ..@ Dimnames  :List of 2
+  .. .. .. .. ..$ : chr [1:5965] "AAACCTGAGCTCTCGG-1_1" "AAACCTGCACGAAAGC-1_1" "AAACCTGCATAAAGGT-1_1" "AAACCTGGTAAATGAC-1_1" ...
+  .. .. .. .. ..$ : chr [1:5965] "AAACCTGAGCTCTCGG-1_1" "AAACCTGCACGAAAGC-1_1" "AAACCTGCATAAAGGT-1_1" "AAACCTGGTAAATGAC-1_1" ...
+  .. .. .. ..@ x         : num [1:295697] 1 0.0811 0.4286 0.3333 0.0811 ...
+  .. .. .. ..@ factors   : list()
+  ..@ neighbors   : list()
+  ..@ reductions  :List of 3
+  .. ..$ pca            :Formal class 'DimReduc' [package "SeuratObject"] with 9 slots
+  .. .. .. ..@ cell.embeddings           : num [1:5965, 1:50] -3.92 -2.71 -4.44 -3.58 -3.77 ...
+  .. .. .. .. ..- attr(*, "dimnames")=List of 2
+  .. .. .. .. .. ..$ : chr [1:5965] "AAACCTGAGCTCTCGG-1_1" "AAACCTGCACGAAAGC-1_1" "AAACCTGCATAAAGGT-1_1" "AAACCTGGTAAATGAC-1_1" ...
+  .. .. .. .. .. ..$ : chr [1:50] "PC_1" "PC_2" "PC_3" "PC_4" ...
+  .. .. .. ..@ feature.loadings          : num [1:1995, 1:50] -0.00613 -0.00492 -0.00325 -0.00582 -0.00435 ...
+  .. .. .. .. ..- attr(*, "dimnames")=List of 2
+  .. .. .. .. .. ..$ : chr [1:1995] "TRBV7-2" "TRBV4-2" "TRBV7-3" "TRBV5-1" ...
+  .. .. .. .. .. ..$ : chr [1:50] "PC_1" "PC_2" "PC_3" "PC_4" ...
+  .. .. .. ..@ feature.loadings.projected: num[0 , 0 ] 
+  .. .. .. ..@ assay.used                : chr "RNA"
+  .. .. .. ..@ global                    : logi FALSE
+  .. .. .. ..@ stdev                     : num [1:50] 8.96 7.05 6.74 4.56 4.48 ...
+  .. .. .. ..@ jackstraw                 :Formal class 'JackStrawData' [package "SeuratObject"] with 4 slots
+  .. .. .. .. .. ..@ empirical.p.values     : num[0 , 0 ] 
+  .. .. .. .. .. ..@ fake.reduction.scores  : num[0 , 0 ] 
+  .. .. .. .. .. ..@ empirical.p.values.full: num[0 , 0 ] 
+  .. .. .. .. .. ..@ overall.p.values       : num[0 , 0 ] 
+  .. .. .. ..@ misc                      :List of 1
+  .. .. .. .. ..$ total.variance: num 1690
+  .. .. .. ..@ key                       : chr "PC_"
+  .. ..$ integrated.rpca:Formal class 'DimReduc' [package "SeuratObject"] with 9 slots
+  .. .. .. ..@ cell.embeddings           : num [1:5965, 1:50] -1.825 -0.493 0.799 -0.66 -2.083 ...
+  .. .. .. .. ..- attr(*, "dimnames")=List of 2
+  .. .. .. .. .. ..$ : chr [1:5965] "AAACCTGAGCTCTCGG-1_1" "AAACCTGCACGAAAGC-1_1" "AAACCTGCATAAAGGT-1_1" "AAACCTGGTAAATGAC-1_1" ...
+  .. .. .. .. .. ..$ : chr [1:50] "integratedrpca_1" "integratedrpca_2" "integratedrpca_3" "integratedrpca_4" ...
+  .. .. .. ..@ feature.loadings          : num [1:1995, 1:50] -0.00613 -0.00492 -0.00325 -0.00582 -0.00435 ...
+  .. .. .. .. ..- attr(*, "dimnames")=List of 2
+  .. .. .. .. .. ..$ : chr [1:1995] "TRBV7-2" "TRBV4-2" "TRBV7-3" "TRBV5-1" ...
+  .. .. .. .. .. ..$ : chr [1:50] "integratedrpca_1" "integratedrpca_2" "integratedrpca_3" "integratedrpca_4" ...
+  .. .. .. ..@ feature.loadings.projected: num[0 , 0 ] 
+  .. .. .. ..@ assay.used                : chr "RNA"
+  .. .. .. ..@ global                    : logi FALSE
+  .. .. .. ..@ stdev                     : num(0) 
+  .. .. .. ..@ jackstraw                 :Formal class 'JackStrawData' [package "SeuratObject"] with 4 slots
+  .. .. .. .. .. ..@ empirical.p.values     : num[0 , 0 ] 
+  .. .. .. .. .. ..@ fake.reduction.scores  : num[0 , 0 ] 
+  .. .. .. .. .. ..@ empirical.p.values.full: num[0 , 0 ] 
+  .. .. .. .. .. ..@ overall.p.values       : num[0 , 0 ] 
+  .. .. .. ..@ misc                      : list()
+  .. .. .. ..@ key                       : chr "integratedrpca_"
+  .. ..$ umap.rpca      :Formal class 'DimReduc' [package "SeuratObject"] with 9 slots
+  .. .. .. ..@ cell.embeddings           : num [1:5965, 1:2] 4.87 -4.49 5.83 -4.27 -3.68 ...
+  .. .. .. .. ..- attr(*, "dimnames")=List of 2
+  .. .. .. .. .. ..$ : chr [1:5965] "AAACCTGAGCTCTCGG-1_1" "AAACCTGCACGAAAGC-1_1" "AAACCTGCATAAAGGT-1_1" "AAACCTGGTAAATGAC-1_1" ...
+  .. .. .. .. .. ..$ : chr [1:2] "umaprpca_1" "umaprpca_2"
+  .. .. .. ..@ feature.loadings          : num[0 , 0 ] 
+  .. .. .. ..@ feature.loadings.projected: num[0 , 0 ] 
+  .. .. .. ..@ assay.used                : chr "RNA"
+  .. .. .. ..@ global                    : logi TRUE
+  .. .. .. ..@ stdev                     : num(0) 
+  .. .. .. ..@ jackstraw                 :Formal class 'JackStrawData' [package "SeuratObject"] with 4 slots
+  .. .. .. .. .. ..@ empirical.p.values     : num[0 , 0 ] 
+  .. .. .. .. .. ..@ fake.reduction.scores  : num[0 , 0 ] 
+  .. .. .. .. .. ..@ empirical.p.values.full: num[0 , 0 ] 
+  .. .. .. .. .. ..@ overall.p.values       : num[0 , 0 ] 
+  .. .. .. ..@ misc                      : list()
+  .. .. .. ..@ key                       : chr "umaprpca_"
+  ..@ images      : list()
+  ..@ project.name: chr "SeuratProject"
+  ..@ misc        : list()
+  ..@ version     :Classes 'package_version', 'numeric_version'  hidden list of 1
+  .. ..$ : int [1:3] 5 0 1
+  ..@ commands    :List of 7
+  .. ..$ NormalizeData.RNA                :Formal class 'SeuratCommand' [package "SeuratObject"] with 5 slots
+  .. .. .. ..@ name       : chr "NormalizeData.RNA"
+  .. .. .. ..@ time.stamp : POSIXct[1:1], format: "2025-01-12 21:35:58"
+  .. .. .. ..@ assay.used : chr "RNA"
+  .. .. .. ..@ call.string: chr "NormalizeData(mergedall)"
+  .. .. .. ..@ params     :List of 5
+  .. .. .. .. ..$ assay               : chr "RNA"
+  .. .. .. .. ..$ normalization.method: chr "LogNormalize"
+  .. .. .. .. ..$ scale.factor        : num 10000
+  .. .. .. .. ..$ margin              : num 1
+  .. .. .. .. ..$ verbose             : logi TRUE
+  .. ..$ ScaleData.RNA                    :Formal class 'SeuratCommand' [package "SeuratObject"] with 5 slots
+  .. .. .. ..@ name       : chr "ScaleData.RNA"
+  .. .. .. ..@ time.stamp : POSIXct[1:1], format: "2025-01-12 21:36:16"
+  .. .. .. ..@ assay.used : chr "RNA"
+  .. .. .. ..@ call.string: chr "ScaleData(mergedall)"
+  .. .. .. ..@ params     :List of 9
+  .. .. .. .. ..$ assay             : chr "RNA"
+  .. .. .. .. ..$ model.use         : chr "linear"
+  .. .. .. .. ..$ use.umi           : logi FALSE
+  .. .. .. .. ..$ do.scale          : logi TRUE
+  .. .. .. .. ..$ do.center         : logi TRUE
+  .. .. .. .. ..$ scale.max         : num 10
+  .. .. .. .. ..$ block.size        : num 1000
+  .. .. .. .. ..$ min.cells.to.block: num 3000
+  .. .. .. .. ..$ verbose           : logi TRUE
+  .. ..$ FindVariableFeatures.RNA         :Formal class 'SeuratCommand' [package "SeuratObject"] with 5 slots
+  .. .. .. ..@ name       : chr "FindVariableFeatures.RNA"
+  .. .. .. ..@ time.stamp : POSIXct[1:1], format: "2025-01-12 21:36:20"
+  .. .. .. ..@ assay.used : chr "RNA"
+  .. .. .. ..@ call.string: chr "FindVariableFeatures(mergedall)"
+  .. .. .. ..@ params     :List of 12
+  .. .. .. .. ..$ assay              : chr "RNA"
+  .. .. .. .. ..$ selection.method   : chr "vst"
+  .. .. .. .. ..$ loess.span         : num 0.3
+  .. .. .. .. ..$ clip.max           : chr "auto"
+  .. .. .. .. ..$ mean.function      :function (mat, display_progress)  
+  .. .. .. .. ..$ dispersion.function:function (mat, display_progress)  
+  .. .. .. .. ..$ num.bin            : num 20
+  .. .. .. .. ..$ binning.method     : chr "equal_width"
+  .. .. .. .. ..$ nfeatures          : num 2000
+  .. .. .. .. ..$ mean.cutoff        : num [1:2] 0.1 8
+  .. .. .. .. ..$ dispersion.cutoff  : num [1:2] 1 Inf
+  .. .. .. .. ..$ verbose            : logi TRUE
+  .. ..$ RunPCA.RNA                       :Formal class 'SeuratCommand' [package "SeuratObject"] with 5 slots
+  .. .. .. ..@ name       : chr "RunPCA.RNA"
+  .. .. .. ..@ time.stamp : POSIXct[1:1], format: "2025-01-12 21:36:42"
+  .. .. .. ..@ assay.used : chr "RNA"
+  .. .. .. ..@ call.string: chr "RunPCA(mergedall)"
+  .. .. .. ..@ params     :List of 10
+  .. .. .. .. ..$ assay          : chr "RNA"
+  .. .. .. .. ..$ npcs           : num 50
+  .. .. .. .. ..$ rev.pca        : logi FALSE
+  .. .. .. .. ..$ weight.by.var  : logi TRUE
+  .. .. .. .. ..$ verbose        : logi TRUE
+  .. .. .. .. ..$ ndims.print    : int [1:5] 1 2 3 4 5
+  .. .. .. .. ..$ nfeatures.print: num 30
+  .. .. .. .. ..$ reduction.name : chr "pca"
+  .. .. .. .. ..$ reduction.key  : chr "PC_"
+  .. .. .. .. ..$ seed.use       : num 42
+  .. ..$ FindNeighbors.RNA.integrated.rpca:Formal class 'SeuratCommand' [package "SeuratObject"] with 5 slots
+  .. .. .. ..@ name       : chr "FindNeighbors.RNA.integrated.rpca"
+  .. .. .. ..@ time.stamp : POSIXct[1:1], format: "2025-01-12 21:37:42"
+  .. .. .. ..@ assay.used : chr "RNA"
+  .. .. .. ..@ call.string: chr "FindNeighbors(mergedall, reduction = \"integrated.rpca\")"
+  .. .. .. ..@ params     :List of 16
+  .. .. .. .. ..$ reduction      : chr "integrated.rpca"
+  .. .. .. .. ..$ dims           : int [1:10] 1 2 3 4 5 6 7 8 9 10
+  .. .. .. .. ..$ assay          : chr "RNA"
+  .. .. .. .. ..$ k.param        : num 20
+  .. .. .. .. ..$ return.neighbor: logi FALSE
+  .. .. .. .. ..$ compute.SNN    : logi TRUE
+  .. .. .. .. ..$ prune.SNN      : num 0.0667
+  .. .. .. .. ..$ nn.method      : chr "annoy"
+  .. .. .. .. ..$ n.trees        : num 50
+  .. .. .. .. ..$ annoy.metric   : chr "euclidean"
+  .. .. .. .. ..$ nn.eps         : num 0
+  .. .. .. .. ..$ verbose        : logi TRUE
+  .. .. .. .. ..$ do.plot        : logi FALSE
+  .. .. .. .. ..$ graph.name     : chr [1:2] "RNA_nn" "RNA_snn"
+  .. .. .. .. ..$ l2.norm        : logi FALSE
+  .. .. .. .. ..$ cache.index    : logi FALSE
+  .. ..$ FindClusters                     :Formal class 'SeuratCommand' [package "SeuratObject"] with 5 slots
+  .. .. .. ..@ name       : chr "FindClusters"
+  .. .. .. ..@ time.stamp : POSIXct[1:1], format: "2025-01-12 21:37:44"
+  .. .. .. ..@ assay.used : chr "RNA"
+  .. .. .. ..@ call.string: chr "FindClusters(mergedall, resolution = 1)"
+  .. .. .. ..@ params     :List of 11
+  .. .. .. .. ..$ graph.name      : chr "RNA_snn"
+  .. .. .. .. ..$ cluster.name    : chr "RNA_snn_res.1"
+  .. .. .. .. ..$ modularity.fxn  : num 1
+  .. .. .. .. ..$ resolution      : num 1
+  .. .. .. .. ..$ method          : chr "matrix"
+  .. .. .. .. ..$ algorithm       : num 1
+  .. .. .. .. ..$ n.start         : num 10
+  .. .. .. .. ..$ n.iter          : num 10
+  .. .. .. .. ..$ random.seed     : num 0
+  .. .. .. .. ..$ group.singletons: logi TRUE
+  .. .. .. .. ..$ verbose         : logi TRUE
+  .. ..$ RunUMAP.RNA.integrated.rpca      :Formal class 'SeuratCommand' [package "SeuratObject"] with 5 slots
+  .. .. .. ..@ name       : chr "RunUMAP.RNA.integrated.rpca"
+  .. .. .. ..@ time.stamp : POSIXct[1:1], format: "2025-01-12 21:39:21"
+  .. .. .. ..@ assay.used : chr "RNA"
+  .. .. .. ..@ call.string: chr [1:2] "RunUMAP(mergedall, reduction = \"integrated.rpca\", dims = 1:30, " "    reduction.name = \"umap.rpca\")"
+  .. .. .. ..@ params     :List of 25
+  .. .. .. .. ..$ dims                : int [1:30] 1 2 3 4 5 6 7 8 9 10 ...
+  .. .. .. .. ..$ reduction           : chr "integrated.rpca"
+  .. .. .. .. ..$ assay               : chr "RNA"
+  .. .. .. .. ..$ slot                : chr "data"
+  .. .. .. .. ..$ umap.method         : chr "uwot"
+  .. .. .. .. ..$ return.model        : logi FALSE
+  .. .. .. .. ..$ n.neighbors         : int 30
+  .. .. .. .. ..$ n.components        : int 2
+  .. .. .. .. ..$ metric              : chr "cosine"
+  .. .. .. .. ..$ learning.rate       : num 1
+  .. .. .. .. ..$ min.dist            : num 0.3
+  .. .. .. .. ..$ spread              : num 1
+  .. .. .. .. ..$ set.op.mix.ratio    : num 1
+  .. .. .. .. ..$ local.connectivity  : int 1
+  .. .. .. .. ..$ repulsion.strength  : num 1
+  .. .. .. .. ..$ negative.sample.rate: int 5
+  .. .. .. .. ..$ uwot.sgd            : logi FALSE
+  .. .. .. .. ..$ seed.use            : int 42
+  .. .. .. .. ..$ angular.rp.forest   : logi FALSE
+  .. .. .. .. ..$ densmap             : logi FALSE
+  .. .. .. .. ..$ dens.lambda         : num 2
+  .. .. .. .. ..$ dens.frac           : num 0.3
+  .. .. .. .. ..$ dens.var.shift      : num 0.1
+  .. .. .. .. ..$ verbose             : logi TRUE
+  .. .. .. .. ..$ reduction.name      : chr "umap.rpca"
+  ..@ tools       : list()
+> 
+> # Check the class/type
+> class(my_data)
+[1] "Seurat"
+attr(,"package")
+[1] "SeuratObject"
+> 
+> # Preview the data
+> head(my_data)
+                        orig.ident nCount_RNA nFeature_RNA propmt rna_size ngene prot_size                 bc
+AAACCTGAGCTCTCGG-1_1 SeuratProject        867          597      0 2.938520   598  2.457882 AAACCTGAGCTCTCGG-1
+AAACCTGCACGAAAGC-1_1 SeuratProject       3012         1037      0 3.479143  1039  2.607455 AAACCTGCACGAAAGC-1
+AAACCTGCATAAAGGT-1_1 SeuratProject       1546          913      0 3.190332   916  2.626340 AAACCTGCATAAAGGT-1
+AAACCTGGTAAATGAC-1_1 SeuratProject       2598         1285      0 3.415808  1292  2.495544 AAACCTGGTAAATGAC-1
+AAACCTGGTCATTAGC-1_1 SeuratProject       2400         1102      0 3.380573  1104  2.735599 AAACCTGGTCATTAGC-1
+AAACCTGTCACTCCTG-1_1 SeuratProject       4100         1575      0 3.613313  1580  2.888179 AAACCTGTCACTCCTG-1
+AAACCTGTCACTTACT-1_1 SeuratProject       4839         1692      0 3.685025  1695  2.702431 AAACCTGTCACTTACT-1
+AAACCTGTCAGATAAG-1_1 SeuratProject       3447         1411      0 3.537693  1413  2.609594 AAACCTGTCAGATAAG-1
+AAACCTGTCAGCACAT-1_1 SeuratProject       2134         1136      0 3.330211  1141  2.635484 AAACCTGTCAGCACAT-1
+AAACCTGTCGGCATCG-1_1 SeuratProject       3353         1371      0 3.526081  1376  2.840733 AAACCTGTCGGCATCG-1
+                       RNA.weight CITE.weight wsnn_res.1 seurat_clusters pANN_0.25_0.005_719
+AAACCTGAGCTCTCGG-1_1 4.754737e-01 0.524526276         10               4            0.000000
+AAACCTGCACGAAAGC-1_1 5.779031e-01 0.422096917          9               1            0.031250
+AAACCTGCATAAAGGT-1_1 7.496447e-01 0.250355307         12               4            0.296875
+AAACCTGGTAAATGAC-1_1 9.779107e-02 0.902208925          1               9            0.093750
+AAACCTGGTCATTAGC-1_1 3.901828e-01 0.609817191          9               1            0.031250
+AAACCTGTCACTCCTG-1_1 1.967977e-03 0.998032023          4               2            0.203125
+AAACCTGTCACTTACT-1_1 7.454425e-03 0.992545575          2               8            0.265625
+AAACCTGTCAGATAAG-1_1 2.540015e-02 0.974599853          1               7            0.265625
+AAACCTGTCAGCACAT-1_1 9.927205e-01 0.007279517         12              10            0.156250
+AAACCTGTCGGCATCG-1_1 5.940044e-05 0.999940600         14               7            0.140625
+                     DF.classifications_0.25_0.005_719 tissue pid pid_tissue pANN_0.25_0.005_621
+AAACCTGAGCTCTCGG-1_1                           Singlet    pln  51     51_pln                  NA
+AAACCTGCACGAAAGC-1_1                           Singlet    pln  51     51_pln                  NA
+AAACCTGCATAAAGGT-1_1                           Singlet    pln  51     51_pln                  NA
+AAACCTGGTAAATGAC-1_1                           Singlet    pln  51     51_pln                  NA
+AAACCTGGTCATTAGC-1_1                           Singlet    pln  51     51_pln                  NA
+AAACCTGTCACTCCTG-1_1                           Singlet    pln  51     51_pln                  NA
+AAACCTGTCACTTACT-1_1                           Singlet    pln  51     51_pln                  NA
+AAACCTGTCAGATAAG-1_1                           Singlet    pln  51     51_pln                  NA
+AAACCTGTCAGCACAT-1_1                           Singlet    pln  51     51_pln                  NA
+AAACCTGTCGGCATCG-1_1                           Singlet    pln  51     51_pln                  NA
+                     DF.classifications_0.25_0.005_621 rna.size prot.size n.gene mt.prop drop.class percent.mt
+AAACCTGAGCTCTCGG-1_1                              <NA>       NA        NA     NA      NA       <NA>         NA
+AAACCTGCACGAAAGC-1_1                              <NA>       NA        NA     NA      NA       <NA>         NA
+AAACCTGCATAAAGGT-1_1                              <NA>       NA        NA     NA      NA       <NA>         NA
+AAACCTGGTAAATGAC-1_1                              <NA>       NA        NA     NA      NA       <NA>         NA
+AAACCTGGTCATTAGC-1_1                              <NA>       NA        NA     NA      NA       <NA>         NA
+AAACCTGTCACTCCTG-1_1                              <NA>       NA        NA     NA      NA       <NA>         NA
+AAACCTGTCACTTACT-1_1                              <NA>       NA        NA     NA      NA       <NA>         NA
+AAACCTGTCAGATAAG-1_1                              <NA>       NA        NA     NA      NA       <NA>         NA
+AAACCTGTCAGCACAT-1_1                              <NA>       NA        NA     NA      NA       <NA>         NA
+AAACCTGTCGGCATCG-1_1                              <NA>       NA        NA     NA      NA       <NA>         NA
+                     wsnn_res.2 cdr3a v_gene j_gene cdr3b va_gene ja_gene vb_gene RNA_snn_res.1 pANN_0.25_0.04_34
+AAACCTGAGCTCTCGG-1_1       <NA>  <NA>   <NA>   <NA>  <NA>    <NA>    <NA>    <NA>             4                NA
+AAACCTGCACGAAAGC-1_1       <NA>  <NA>   <NA>   <NA>  <NA>    <NA>    <NA>    <NA>             1                NA
+AAACCTGCATAAAGGT-1_1       <NA>  <NA>   <NA>   <NA>  <NA>    <NA>    <NA>    <NA>             4                NA
+AAACCTGGTAAATGAC-1_1       <NA>  <NA>   <NA>   <NA>  <NA>    <NA>    <NA>    <NA>             9                NA
+AAACCTGGTCATTAGC-1_1       <NA>  <NA>   <NA>   <NA>  <NA>    <NA>    <NA>    <NA>             1                NA
+AAACCTGTCACTCCTG-1_1       <NA>  <NA>   <NA>   <NA>  <NA>    <NA>    <NA>    <NA>             2                NA
+AAACCTGTCACTTACT-1_1       <NA>  <NA>   <NA>   <NA>  <NA>    <NA>    <NA>    <NA>             8                NA
+AAACCTGTCAGATAAG-1_1       <NA>  <NA>   <NA>   <NA>  <NA>    <NA>    <NA>    <NA>             7                NA
+AAACCTGTCAGCACAT-1_1       <NA>  <NA>   <NA>   <NA>  <NA>    <NA>    <NA>    <NA>            10                NA
+AAACCTGTCGGCATCG-1_1       <NA>  <NA>   <NA>   <NA>  <NA>    <NA>    <NA>    <NA>             7                NA
+                     DF.classifications_0.25_0.04_34 RNA_snn_res.1.2 RNA_snn_res.1.5 tissue_cluster
+AAACCTGAGCTCTCGG-1_1                            <NA>            <NA>            <NA>          pln_4
+AAACCTGCACGAAAGC-1_1                            <NA>            <NA>            <NA>          pln_1
+AAACCTGCATAAAGGT-1_1                            <NA>            <NA>            <NA>          pln_4
+AAACCTGGTAAATGAC-1_1                            <NA>            <NA>            <NA>          pln_9
+AAACCTGGTCATTAGC-1_1                            <NA>            <NA>            <NA>          pln_1
+AAACCTGTCACTCCTG-1_1                            <NA>            <NA>            <NA>          pln_2
+AAACCTGTCACTTACT-1_1                            <NA>            <NA>            <NA>          pln_8
+AAACCTGTCAGATAAG-1_1                            <NA>            <NA>            <NA>          pln_7
+AAACCTGTCAGCACAT-1_1                            <NA>            <NA>            <NA>         pln_10
+AAACCTGTCGGCATCG-1_1                            <NA>            <NA>            <NA>          pln_7
