@@ -1,0 +1,151 @@
+# Notebooks CLAUDE.md
+
+Instructions specific to the analysis notebooks in this folder.
+
+## Notebook Pipeline
+
+```
+1_preprocessing.ipynb  → results/1_preprocessing/
+2_integration.ipynb    → results/2_integration/
+3_visualization.ipynb  → results/3_visualization/
+4_analysis.ipynb       → results/4_analysis/
+```
+
+Run notebooks in order. Each saves checkpoints that subsequent notebooks load.
+
+## Key Variables in 2_integration.ipynb
+
+### Normalized Arrays (for MaxFuse input)
+- `rna_shared` / `protein_shared` - Normalized shared features
+- `rna_active` / `protein_active` - Normalized active features (HVGs for RNA, all non-excluded for protein)
+
+### Pre-normalization Arrays (for visualization)
+- `rna_shared_raw` - Raw counts
+- `rna_after_log` - After log1p transformation
+- `protein_shared_raw` - Pre-gated values (0-1 from scimap)
+
+### Detection Masks
+- `rna_detection_mask` - Boolean, True where count > 0
+- `protein_detection_mask` - Boolean, True where gate-positive
+
+### Constants
+- `ZERO_VALUE = -3.5` - Fixed value for undetected RNA features
+- `EXCLUDED_MARKERS` - List of markers to exclude (non-immune markers for CD45+ RNA data)
+
+## Normalization Strategy
+
+### RNA (Sparse Data)
+Detection-aware normalization:
+1. `normalize_total` (library size normalization)
+2. `log1p` (variance stabilization)
+3. Per-feature z-score on **detected cells only**
+4. Undetected cells → `ZERO_VALUE`
+
+### Protein (Continuous Data)
+Standard z-score on ALL values:
+1. Data comes pre-gated from scimap (0-1 scale)
+2. StandardScaler z-score (mean=0, std=1)
+3. Gate-based detection mask for comparisons only
+
+**Key insight**: Protein data has no true zeros (it's fluorescence intensity), so detection-aware normalization is wrong for protein. Use standard z-score.
+
+## Large Cell Ratio Matching (>100:1 protein:RNA)
+
+When protein cells >> RNA cells, use these parameter adjustments:
+
+```python
+# Sqrt-scaled matching ratio (not linear)
+ratio = n_protein / n_rna
+matching_ratio = min(100, max(10, int(np.sqrt(ratio)) + 5))
+
+# GMM-guided pivot filtering (not fixed 20%)
+pivot_filter_prop = min(0.2, bad_mode_fraction + 0.02)
+
+# Reduced propagation filter
+propagate_filter_prop = 0.05  # Not 0.1
+```
+
+See skill: `.skills_registry/plugins/maxfuse/large-cell-ratio-matching/`
+
+## Visualization Best Practices
+
+### Scatter Plot Labels
+Use `adjustText` to prevent label overlap:
+```python
+from adjustText import adjust_text
+
+texts = []
+for i, name in enumerate(names):
+    texts.append(ax.text(x[i], y[i], name, fontsize=7))
+adjust_text(texts, ax=ax, arrowprops=dict(arrowstyle='-', color='gray', alpha=0.5))
+```
+
+### Per-Feature Expression Plots
+**Problem**: Z-scored means are ~0 by design, making bar charts useless.
+
+**Solution**: Use pre-normalization values with rank-scaling:
+```python
+from scipy.stats import rankdata
+
+# Compute pre-normalization means
+rna_log_means = [rna_after_log[detected, i].mean() for i in range(n_features)]
+prot_raw_means = [protein_shared_raw[:, i].mean() for i in range(n_features)]
+
+# Rank-scale to 0-1 for visualization
+rna_ranks = rankdata(rna_log_means, method='average')
+rna_scaled = (rna_ranks - 1) / (n_features - 1)
+```
+
+### Detection Rate Scatter
+**Problem**: Low detection rates cluster in bottom-left corner.
+
+**Solution**: Sqrt-scale both axes:
+```python
+rna_det_sqrt = np.sqrt(rna_det_rates)
+prot_det_sqrt = np.sqrt(prot_det_rates)
+ax.scatter(rna_det_sqrt, prot_det_sqrt, ...)
+ax.set_xlabel('RNA detection (√%)')
+```
+
+### Bar Charts with Many Features
+Always rotate x-axis labels:
+```python
+ax.set_xticklabels([f[:6] for f in feature_names], rotation=45, ha='right', fontsize=7)
+```
+
+### Histogram Auto-scaling
+Don't hardcode bin ranges - use actual data:
+```python
+bins = np.linspace(data.min(), data.max(), 50)
+ax.hist(data, bins=bins, ...)
+```
+
+## Marker Exclusions (CD45+ RNA Data)
+
+When RNA data is CD45+ only (immune cells), exclude non-immune markers:
+```python
+EXCLUDED_MARKERS = [
+    'Vimentin', 'Podoplanin', 'aSMA', 'CD31', 'Cytokeratin',
+    'E-Cadherin', 'Pan-Cytokeratin', 'EpCAM', 'Collagen-IV',
+    'Synaptophysin', 'Chromogranin-A', 'CD35', 'B2M', 'Na-K-ATPase',
+    'PCNA', 'Ki67', 'p53', 'Caspase-3', 'DNA1', 'DNA2', 'Background'
+]
+```
+
+Apply consistently in BOTH:
+1. Shared feature matching cell
+2. Protein active features cell
+
+## Common Issues
+
+### "Protein distribution shows bar at -3"
+Old cached values from detection-aware normalization. **Fix**: Restart kernel, re-run all cells.
+
+### "Only 77% RNA coverage after integration"
+`matching_ratio` too high for large cell ratios. **Fix**: Use sqrt-scaling (see above).
+
+### "Per-Feature Mean plot shows only flat lines"
+Plotting z-scored means which are ~0 by design. **Fix**: Use pre-normalization values with rank-scaling.
+
+### "Labels overlapping in scatter plot"
+**Fix**: Use `adjustText` library (see above).
