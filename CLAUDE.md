@@ -114,6 +114,18 @@ The `Fusor` class supports two smoothing approaches (set via `method` parameter)
 - **Graph edges**: Lists of `[rows, cols, weights]` representing weighted k-NN graph edges
 - Arrays are numpy ndarrays with shape `(n_samples, n_features)`
 
+## Notebook Cell References
+
+**NEVER refer to notebook cells by number.** Cell numbers are not visible to users and change as cells are added/deleted. Instead, refer to cells by:
+
+1. **Section header or markdown title** above the cell: "the cell under '## Load Data'"
+2. **First line of code**: "the cell starting with `protein_gated = sc.read_h5ad(...)`"
+3. **Purpose/function**: "the normalization cell", "the visualization cell"
+4. **Variable being defined**: "the cell that defines `rna_shared`"
+
+Bad: "Cell 9 has the normalization code"
+Good: "The normalization cell (starting with `# Normalize shared features`) needs updating"
+
 ## Notebook Pipeline
 
 The analysis notebooks form a connected pipeline via checkpoint files:
@@ -164,6 +176,38 @@ Data files are stored in `data/` (not tracked in git):
 
 Results are stored in `results/` (not tracked in git), organized by notebook.
 
+## MaxFuse Parameter Tuning
+
+### Critical: Scale Alignment
+
+**BOTH modalities must be z-scored to the same scale before integration:**
+- RNA: normalize_total → log1p → z-score (mean≈0, std≈1, range [-5, 5])
+- Protein: z-score using StandardScaler (mean≈0, std≈1, range [-5, 5])
+
+If protein is used "as-is" without z-scoring, RNA will dominate matching due to variance mismatch.
+
+### Parameter Scaling by Panel Size
+
+When protein panel size changes (e.g., 26 → 59 markers), parameters must be adjusted:
+
+| Parameter | 26 Markers | 59 Markers | Rule |
+|-----------|-----------|-----------|------|
+| CCA Components | 25 | **7** | `sqrt(n_prot_active) + 1` |
+| SVD for CCA (RNA) | 40 | 50 | Increase with more protein info |
+| SVD for CCA (Protein) | None | **35** | Limit to ~60% of features |
+| SVD for Graphs | 15 | 30 | ~50% of features |
+| SVD for Initial Pivots | 25/20 | 20/18 | Reduce for weak linkage |
+
+**CCA Component Rule**: `cca_components = min(n_shared - 1, sqrt(n_prot_active) + 1, 12)`
+
+Using too many CCA components with more protein features causes overfitting (trivially perfect correlations).
+
+### Diagnostic Checks
+
+1. **Scale alignment**: Both modalities should have mean≈0, std≈0.8-1.0
+2. **Canonical correlations**: Should decay smoothly, not all >0.95 (overfitting sign)
+3. **UMAP alignment**: Matched pairs should be close, not crossing clusters
+
 ## Integration Validation Best Practices
 
 ### Cross-Validation Direction
@@ -171,7 +215,7 @@ When validating RNA-protein integration accuracy, the correct question is:
 - **Correct**: "Can RNA expression predict protein levels?" (RNA → Protein)
 - **Wrong**: "Can protein predict RNA?" (small panel can't explain large panel)
 
-The rich RNA panel (18k genes) should predict the sparse protein panel (26 markers), not vice versa.
+The rich RNA panel (18k genes) should predict the protein panel (59 markers), not vice versa.
 
 ### Key Metrics
 1. **Spearman correlation** (shared features): Validates that matched cells have correlated expression
@@ -182,6 +226,35 @@ The rich RNA panel (18k genes) should predict the sparse protein panel (26 marke
 - Low R² (4-7%) is normal for RNA→protein prediction due to post-transcriptional regulation
 - Permutation p-value < 0.01 confirms the integration captured real biological signal
 - Best performing markers: B cell (MS4A1/CD20), macrophage (CD68), T cell (CD3E)
+
+## Critical: Notebook Data Consistency
+
+When modifying data sources in notebooks, **check the ENTIRE notebook** for dependent variables:
+
+### Common Pitfall: Mixed Data Sources
+If switching from one data source to another (e.g., raw protein data → gated protein data), ALL arrays derived from that source must be updated:
+- `protein_shared` and `protein_active` must come from the SAME source
+- Shape mismatches (e.g., 1.9M vs 1.2M cells) indicate mixed data sources
+- Search for ALL references to the old variable name before making changes
+
+### Gated Protein Data
+- Location: `data/6551_leiden_umap.h5ad` (1.2M cells, 59 markers)
+- Created by: `6551_Analysis.ipynb` using scimap gating with marker-specific thresholds
+- Transformation: raw → scimap gate → log1p → sc.pp.scale()
+- **Do NOT guess detection thresholds** - they were set per-marker in napari/scimap
+
+### Never Guess Parameters
+When unclear about thresholds, scaling, or transformations:
+1. Find the notebook/script that created the data
+2. Read the actual processing steps
+3. Use those exact values
+4. If source is unclear, ASK - don't try multiple guesses
+
+### Before Changing Any Data Source
+1. Grep for all references to the variable being replaced
+2. Trace which arrays are derived from it
+3. Update ALL downstream uses
+4. Verify shapes match across modalities
 
 ## Archive
 
@@ -198,7 +271,11 @@ This project uses a skills registry for Claude memory persistence at `.skills_re
 ### Available Skills
 - `plugins/maxfuse/repo-reorganization/` - Python package with pyproject.toml inside package directory
 - `plugins/maxfuse/region-aware-matching/` - Spatial region-aware cell matching for CODEX/scRNAseq
+- `plugins/maxfuse/parameter-scaling/` - MaxFuse parameter tuning for different protein panel sizes (26 vs 59+ markers)
+- `plugins/maxfuse/cross-modal-normalization/` - Scale alignment for RNA-protein integration (BOTH must be z-scored)
 - `plugins/scientific/notebook-checkpoint-pattern/` - Connecting notebooks via checkpoint files
+- `plugins/scientific/notebook-cell-references/` - How to refer to notebook cells (NEVER use cell numbers)
+- `plugins/scientific/notebook-data-consistency/` - Check ALL dependent arrays when changing data sources
 - `plugins/scientific/plotly-figurewidget-interactive/` - Fix for Plotly FigureWidget interactive dashboard bugs
 - `plugins/scientific/project-data-separation/` - Separating repository code from user data
 - `plugins/scientific/sparse-expression-visualization/` - Bar plots vs boxplots for sparse scRNA-seq data

@@ -9,6 +9,7 @@ data/
 *.tsv
 *.csv
 !src/maxfuse/**/*.csv
+6551_Analysis.ipynb
 
 # Results/outputs (kept on disk, not tracked in git)
 results/
