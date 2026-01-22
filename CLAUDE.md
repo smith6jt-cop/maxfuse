@@ -126,6 +126,84 @@ The `Fusor` class supports two smoothing approaches (set via `method` parameter)
 Bad: "Cell 9 has the normalization code"
 Good: "The normalization cell (starting with `# Normalize shared features`) needs updating"
 
+## Editing Large Notebooks (Token Limit Workarounds)
+
+Large notebooks with many cells or outputs can exceed Claude's token limit, causing incomplete reads or silent failures. Use these strategies:
+
+### Strategy 1: Direct Cell Editing (Preferred)
+
+**Don't read the whole notebook.** Use the `NotebookEdit` tool directly with cell index:
+
+```
+User: "Edit cell 39 in notebooks/2_integration.ipynb - change cca_components from 25 to 7"
+Claude: [Uses NotebookEdit with cell index 39, no Read needed]
+```
+
+To find cell indices, run:
+```bash
+python scripts/list_cells.py notebooks/2_integration.ipynb
+```
+
+### Strategy 2: User Provides Cell Content
+
+Instead of asking Claude to read the notebook:
+```
+User: "Here's the cell I want to modify:
+[paste cell code]
+Change cca_components from 25 to 7"
+```
+
+### Strategy 3: Read Specific Line Ranges
+
+For partial notebook inspection:
+```
+Read notebooks/2_integration.ipynb lines 500-600
+```
+
+### Strategy 4: Describe the Cell Location
+
+Reference cells by surrounding context:
+```
+User: "Edit the cell under '## Step 7: MaxFuse Integration' that starts with 'fusor = Fusor('"
+```
+
+### Helper Script: `scripts/list_cells.py`
+
+Lists all cells with indices and first lines (without full content):
+```bash
+# List cells in a notebook
+python scripts/list_cells.py notebooks/2_integration.ipynb
+
+# Add cell IDs to old notebooks (upgrades to nbformat 4.5)
+python scripts/list_cells.py notebooks/*.ipynb --add-ids
+```
+
+Output format:
+```
+Idx  | Cell ID      | Type     | First Line
+-----|--------------|----------|----------------------------------
+0    | -            | markdown | # Integration: MaxFuse and MARIO
+1    | -            | code     | import numpy as np
+39   | -            | code     | fusor = Fusor(
+```
+
+### MCP Notebook Tools
+
+The `notebook` MCP server (`mcp-jupyter`) provides:
+- `list_cells` - List cells with indices (no full content)
+- `get_cell_source` - Read specific cell by index
+- `edit_cell_source` - Modify cell by index
+- `insert_cell` / `delete_cell` - Add/remove cells
+
+These tools allow targeted edits without loading the entire notebook into context.
+
+### When Claude Must Read a Large Notebook
+
+If full context is needed:
+1. **Split into smaller notebooks** - Separate preprocessing, integration, visualization
+2. **Extract large code to `.py` modules** - Keep cells as thin wrappers
+3. **Clear outputs** before reading - Run `jupyter nbconvert --clear-output --inplace notebook.ipynb`
+
 ## Notebook Pipeline
 
 The analysis notebooks form a connected pipeline via checkpoint files:
