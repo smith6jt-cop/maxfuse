@@ -266,25 +266,80 @@ If protein is used "as-is" without z-scoring, RNA will dominate matching due to 
 
 ### Parameter Scaling by Panel Size
 
-When protein panel size changes (e.g., 26 → 59 markers), parameters must be adjusted:
+When protein panel size changes, parameters must be adjusted. **Critical rule: All SVD components must be < n_features.**
 
-| Parameter | 26 Markers | 59 Markers | Rule |
-|-----------|-----------|-----------|------|
-| CCA Components | 25 | **7** | `sqrt(n_prot_active) + 1` |
-| SVD for CCA (RNA) | 40 | 50 | Increase with more protein info |
-| SVD for CCA (Protein) | None | **35** | Limit to ~60% of features |
-| SVD for Graphs | 15 | 30 | ~50% of features |
-| SVD for Initial Pivots | 25/20 | 20/18 | Reduce for weak linkage |
+| Parameter | 26 Markers | 59 Markers | 19 Markers | Rule |
+|-----------|-----------|-----------|------------|------|
+| CCA Components | 25 | 7 | **10** | `min(n_shared - 1, 10)` for small panels |
+| SVD for CCA (RNA) | 40 | 50 | 50 | Increase with more protein info |
+| SVD for CCA (Protein) | None | 35 | **15** | `min(15, n_prot - 1)` |
+| SVD for Graphs (Protein) | 15 | 30 | **15** | `min(15, n_prot - 1)` |
+| SVD for Initial Pivots | 25/20 | 20/18 | **15/15** | `min(15, n_shared - 1)` |
+| Metacell Size | 2 | 2 | **1** | Disable for <25 features |
 
-**CCA Component Rule**: `cca_components = min(n_shared - 1, sqrt(n_prot_active) + 1, 12)`
+**CCA Component Rule**: `cca_components = min(n_shared - 1, 10)` for small panels (<25 features)
 
-Using too many CCA components with more protein features causes overfitting (trivially perfect correlations).
+**Metacell Rule**: With <25 features, metacell_size=2 provides minimal noise reduction. Use `metacell_size=1` (disabled) or increase to 5+ if noise is genuinely problematic.
+
+Using too many CCA/SVD components with small panels causes overfitting (trivially perfect correlations).
 
 ### Diagnostic Checks
 
 1. **Scale alignment**: Both modalities should have mean≈0, std≈0.8-1.0
 2. **Canonical correlations**: Should decay smoothly, not all >0.95 (overfitting sign)
 3. **UMAP alignment**: Matched pairs should be close, not crossing clusters
+
+## Pre-filtering for CD45+ RNA Data
+
+When RNA data is CD45+ sorted (immune cells only), protein data may contain non-immune cells that shouldn't match.
+
+### Two-Stage Pre-filtering
+
+```python
+# Stage 1: Marker-specific z-score filtering
+# Remove cells where specific markers have extreme low values (e.g., detection failures)
+MARKER_ZSCORE_THRESHOLDS = {
+    'MPO': -2.5,  # Filter cells where MPO z-score < -2.5
+    # Add more markers as needed
+}
+
+for marker, threshold in MARKER_ZSCORE_THRESHOLDS.items():
+    marker_idx = marker_names.index(marker)
+    keep_mask &= protein_shared[:, marker_idx] >= threshold
+
+# Stage 2: Immune cell filtering (for Pancreas tissue)
+# Keep only protein cells with immune signature above threshold
+immune_markers = ['CD3E', 'MS4A1', 'CD68', 'PTPRC']
+immune_score = protein_shared[:, immune_marker_idx].sum(axis=1)
+threshold = np.percentile(immune_score[is_pln], 25)  # Use pLN as reference
+keep_mask &= (is_pln) | (immune_score > threshold)
+```
+
+### Why Pre-filter?
+- Non-immune cells create "bad mode" in bimodal matching scores
+- Cross-tissue matches (pLN RNA → Pancreas epithelial) are biologically meaningless
+- Filtering BEFORE Fusor creation is critical - arrays must be updated before integration
+
+### Cell Execution Order Matters
+After pre-filtering, **re-run all subsequent cells** to use filtered arrays. The Fusor and tissue priors must see the reduced data.
+
+## Diagnosing Bimodal Matching Scores
+
+If matching scores show two distinct modes (e.g., peaks at 0.2 and 0.8):
+
+### Diagnostic Checklist
+1. **Tissue mismatch**: Check cross-tabulation of RNA tissue vs protein tissue in matches
+2. **Expression levels**: Compare total protein expression between score modes
+3. **Shared feature correlation**: Calculate per-pair correlation across shared features
+4. **CCA effect**: Compare initial vs refined score distributions (kurtosis)
+
+### Common Causes
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Cross-tissue matches in bad mode | Tissue imbalance (e.g., 476k Pancreas vs 21k pLN) | Increase region prior weight to 0.7+ |
+| Bad mode has low/negative expression | Non-immune cells in protein data | Pre-filter by immune score |
+| CCA increases bimodality | CCA correctly separates matchable/unmatchable | Use GMM threshold to filter bad matches |
+| Specific marker at -3.0 | Detection failure or normalization artifact | Filter cells by marker z-score threshold |
 
 ## Integration Validation Best Practices
 
@@ -349,8 +404,9 @@ This project uses a skills registry for Claude memory persistence at `.skills_re
 ### Available Skills
 - `plugins/maxfuse/repo-reorganization/` - Python package with pyproject.toml inside package directory
 - `plugins/maxfuse/region-aware-matching/` - Spatial region-aware cell matching for CODEX/scRNAseq
-- `plugins/maxfuse/parameter-scaling/` - MaxFuse parameter tuning for different protein panel sizes (26 vs 59+ markers)
+- `plugins/maxfuse/parameter-scaling/` - MaxFuse parameter tuning for different protein panel sizes (19, 26, 59+ markers)
 - `plugins/maxfuse/cross-modal-normalization/` - Scale alignment for RNA-protein integration (BOTH must be z-scored)
+- `plugins/maxfuse/bimodal-score-diagnosis/` - Diagnosing bimodal matching scores (tissue mismatch, non-immune cells, marker issues)
 - `plugins/scientific/notebook-checkpoint-pattern/` - Connecting notebooks via checkpoint files
 - `plugins/scientific/notebook-cell-references/` - How to refer to notebook cells (NEVER use cell numbers)
 - `plugins/scientific/notebook-data-consistency/` - Check ALL dependent arrays when changing data sources

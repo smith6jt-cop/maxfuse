@@ -136,6 +136,40 @@ Apply consistently in BOTH:
 1. Shared feature matching cell
 2. Protein active features cell
 
+## Pre-filtering Cells
+
+When RNA is CD45+ sorted, add pre-filtering BEFORE Fusor creation:
+
+### Marker-Specific Z-Score Filtering
+Filter cells where specific markers have extreme values without excluding the marker:
+```python
+MARKER_ZSCORE_THRESHOLDS = {
+    'MPO': -2.5,  # Remove cells where MPO < -2.5 (keeps MPO as a feature)
+}
+for marker, threshold in MARKER_ZSCORE_THRESHOLDS.items():
+    marker_idx = marker_names.index(marker)
+    keep_mask &= protein_shared[:, marker_idx] >= threshold
+```
+
+### Immune Cell Filtering
+Remove non-immune Pancreas cells:
+```python
+immune_markers = ['CD3E', 'MS4A1', 'CD68', 'PTPRC']
+immune_score = protein_shared[:, marker_idx].sum(axis=1)
+threshold = np.percentile(immune_score[is_pln], 25)
+keep_mask &= (is_pln) | (immune_score > threshold)
+```
+
+### Critical: Cell Execution Order
+After pre-filtering updates `protein_shared`, `protein_active`, `protein_adata`:
+1. **Re-run ALL subsequent cells** - Fusor, batching, priors, etc.
+2. Add verification prints to confirm filtered data is used:
+```python
+print(f"protein_shared: {protein_shared.shape}")
+if protein_shared.shape[0] > 400000:
+    print("WARNING: Filter may not have run!")
+```
+
 ## Common Issues
 
 ### "Protein distribution shows bar at -3"
@@ -149,3 +183,12 @@ Plotting z-scored means which are ~0 by design. **Fix**: Use pre-normalization v
 
 ### "Labels overlapping in scatter plot"
 **Fix**: Use `adjustText` library (see above).
+
+### "Bimodal matching scores (peaks at 0.2 and 0.8)"
+Usually tissue mismatch or non-immune cells. **Diagnose**: Check tissue cross-tabulation, expression levels by mode. **Fix**: Pre-filter + increase region prior weight.
+
+### "Filtered data not being used"
+Cell execution order issue. **Fix**: After pre-filter cell, use "Run All Below" or manually run each subsequent cell in order.
+
+### "Gap in z-scored values between -3.0 and -2.8"
+Specific marker has detection issues. **Diagnose**: Check which marker has most values at -3.0. **Fix**: Add marker-specific z-score threshold to pre-filter.
