@@ -2,6 +2,21 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ CRITICAL: Never Use Cell Numbers
+
+**NEVER say "cell 38", "Cell 12", or any cell index.** Cell numbers are:
+- NOT visible to users in Jupyter
+- Change when cells are added/deleted
+- Impossible for users to find
+
+**Always refer to cells by:**
+- First line of code: "the cell starting with `# PRE-FILTER:`"
+- Section header: "the cell under '## Load Data'"
+- Purpose: "the pre-filter cell", "the normalization cell"
+- Variable: "the cell that creates `protein_shared`"
+
+This applies to ALL communication - tool calls can use indices internally, but messages to users must use descriptive references.
+
 ## Project Overview
 
 MaxFuse is a Python package for integrating single-cell datasets from different modalities with no overlapping features and/or under low signal-to-noise ratio regimes. It's designed for cross-modal data integration in "weak linkage" scenarios where linked features are few or uninformative, such as integrating spatial proteomic data with single-cell sequencing data.
@@ -116,15 +131,7 @@ The `Fusor` class supports two smoothing approaches (set via `method` parameter)
 
 ## Notebook Cell References
 
-**NEVER refer to notebook cells by number.** Cell numbers are not visible to users and change as cells are added/deleted. Instead, refer to cells by:
-
-1. **Section header or markdown title** above the cell: "the cell under '## Load Data'"
-2. **First line of code**: "the cell starting with `protein_gated = sc.read_h5ad(...)`"
-3. **Purpose/function**: "the normalization cell", "the visualization cell"
-4. **Variable being defined**: "the cell that defines `rna_shared`"
-
-Bad: "Cell 9 has the normalization code"
-Good: "The normalization cell (starting with `# Normalize shared features`) needs updating"
+See **⚠️ CRITICAL: Never Use Cell Numbers** at the top of this file. This rule is absolute - there are no exceptions.
 
 ## Editing Large Notebooks (Token Limit Workarounds)
 

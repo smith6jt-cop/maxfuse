@@ -22,14 +22,14 @@ Run notebooks in order. Each saves checkpoints that subsequent notebooks load.
 ### Pre-normalization Arrays (for visualization)
 - `rna_shared_raw` - Raw counts
 - `rna_after_log` - After log1p transformation
-- `protein_shared_raw` - Pre-gated values (0-1 from scimap)
+- `protein_shared_raw` - Log-transformed fluorescence (from `protein_adata.layers['log']`)
 
 ### Detection Masks
 - `rna_detection_mask` - Boolean, True where count > 0
 - `protein_detection_mask` - Boolean, True where gate-positive
 
 ### Constants
-- `ZERO_VALUE = -3.5` - Fixed value for undetected RNA features
+- `ZERO_VALUE = -1.0` - Fixed value for undetected RNA features (tuned to reduce bimodality)
 - `EXCLUDED_MARKERS` - List of markers to exclude (non-immune markers for CD45+ RNA data)
 
 ## Normalization Strategy
@@ -42,12 +42,14 @@ Detection-aware normalization:
 4. Undetected cells → `ZERO_VALUE`
 
 ### Protein (Continuous Data)
-Standard z-score on ALL values:
-1. Data comes pre-gated from scimap (0-1 scale)
+Standard z-score on LOG-TRANSFORMED fluorescence:
+1. Extract log layer: `protein_adata.layers['log']` (NOT gated 0-1 values)
 2. StandardScaler z-score (mean=0, std=1)
 3. Gate-based detection mask for comparisons only
 
 **Key insight**: Protein data has no true zeros (it's fluorescence intensity), so detection-aware normalization is wrong for protein. Use standard z-score.
+
+**CRITICAL**: Use the LOG layer, NOT gated 0-1 values. The gated values are right-skewed (56% < 0 after z-score, skewness=0.62), causing bimodal matching. Log values have better symmetry (53% < 0, skewness=0.30).
 
 ## Large Cell Ratio Matching (>100:1 protein:RNA)
 
@@ -192,3 +194,31 @@ Cell execution order issue. **Fix**: After pre-filter cell, use "Run All Below" 
 
 ### "Gap in z-scored values between -3.0 and -2.8"
 Specific marker has detection issues. **Diagnose**: Check which marker has most values at -3.0. **Fix**: Add marker-specific z-score threshold to pre-filter.
+
+### "Protein distribution peaked below zero / right-skewed"
+Using gated 0-1 values instead of log-transformed fluorescence. **Diagnose**: Check `(protein_shared < 0).mean()` - if >55%, you're using gated values. **Fix**: Use `protein_adata.layers['log']` for normalization instead of `.X` (gated values). The log layer has lower skewness (0.30 vs 0.62) and better centering.
+
+### "Bimodal initial pivot scores"
+Often caused by scale mismatch between sparse RNA and dense protein. **Diagnose**: Check RNA sparsity - if >80% of values are at ZERO_VALUE, that's the issue. **Fix**:
+1. Use log layer for protein normalization (reduces skewness)
+2. Tune ZERO_VALUE: -1.0 works better than -3.0 for sparse RNA (mode separation 0.131 vs 0.176)
+3. The smaller gap between undetected RNA and protein improves correlation-based matching
+
+### "Conflicting match statistics between cells"
+**CRITICAL**: MaxFuse has TWO matching stages with different statistics:
+
+| Stage | What it measures | Typical count | Typical quality |
+|-------|------------------|---------------|-----------------|
+| **Pivot** | High-confidence anchor matches | ~1,500 RNA | ~80% "good" (score≥0.5) |
+| **Propagated** | Extended matches via kNN | ~5,500 RNA | ~65% "good" |
+
+**Example confusion:**
+- Cell A (pivots): "1159/1419 RNA have good matches" (81.7%)
+- Cell B (propagated): "60.5% RNA coverage" (5588/9236)
+
+These are BOTH correct but measure DIFFERENT stages! The notebook now includes a comparison cell after propagation that shows both stages side-by-side.
+
+**When comparing stats, always check:**
+1. Is this pivot-level or propagated-level?
+2. What's the denominator (pivot count vs total RNA)?
+3. What threshold defines "good" (0.5 is standard)?
